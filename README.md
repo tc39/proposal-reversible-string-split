@@ -2,6 +2,10 @@
 
 ![](./cover.png)
 
+<small>
+Image from [@DasSurma](https://twitter.com/DasSurma/status/1480555236473384964)
+</small>
+
 ## Status
 
 Champion(s): Luca Casonato
