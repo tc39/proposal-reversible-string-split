@@ -2,9 +2,8 @@
 
 ![](./cover.png)
 
-<small>
-Image from [@DasSurma](https://twitter.com/DasSurma/status/1480555236473384964)
-</small>
+<small>Image from
+<a href="https://twitter.com/DasSurma/status/1480555236473384964">@DasSurma</a></small>
 
 ## Status
 
