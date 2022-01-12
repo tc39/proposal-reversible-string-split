@@ -198,18 +198,24 @@ console.log("a|b|c|d|e|f".split("|", { n: 2 }));
 console.log("a|b|c|d|e|f".split("|", 2, true));
 // or
 console.log("a|b|c|d|e|f".split("|", { n: 2, remainder: true }));
+// or
+console.log("a|b|c|d|e|f".split("|", 2, { remainder: true }));
 ```
 
-The former may be confusing to users though, as it is not obvious that the
-return value between `split("|", 2)` and `split("|", { n: 2 })` is different.
-These kinds of overloads exist on the web platform (e.g. `addEventListener`),
-but the form you use does not impact behaviour.
+The first may be confusing to users though, as it is not obvious that the return
+value between `split("|", 2)` and `split("|", { n: 2 })` is different. These
+kinds of overloads exist on the web platform (e.g. `addEventListener`), but the
+form you use does not impact behaviour.
 
-The latter is more clear, but at the same time also less clear, because it is
+The second is more clear, but at the same time also less clear, because it is
 not obvious what the `true` value in the third argument is.
 
-The last option is the most clear, but is also the most verbose. The verbosity
+The third option is pretty clear, but is also the most verbose. The verbosity
 may make it cumbersome to use.
+
+The 4th option is probably the "cleanest". Because the extra option is ignored
+in current engines, it might make it look like the extra option is supported,
+whereas in fact it is not - it is just being ignored.
 
 Which of the 4 proposed options should ultimately be used should be up to the
 committee as a whole. I don't really care (although I prefer the `splitn`
