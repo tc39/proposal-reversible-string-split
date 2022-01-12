@@ -16,12 +16,14 @@ Stage: 0
 ## Motivation
 
 The string split method in JavaScript behaves unlike the string split methods in
-nearly all other languages. In JavaScript, a `splitN` (split with max N return
-values), is essentially a regular split, but with the output array truncated to
-the first N values.
+nearly all other languages. In JavaScript, a `split(sep, N)` is essentially a
+regular split, but with the output array truncated to the first N values.
+JavaScript considers the N to mean the number of splits _and_ the number of
+return items.
 
-In most other languages `splitN` instead splits the original string N amount of
-times. The last value in the returned array is the "remainder" of the string.
+In most other languages a `splitN` instead splits the original string into N
+items, including a remainder. They thus split N-1 times. The last item in the
+returned array contains the "remainder" of the string.
 
 ```perl
 # Perl
@@ -30,22 +32,6 @@ print join('\n', split(/\|/, 'a|b|c|d|e|f', 2))
 
 # a
 # b|c|d|e|f
-```
-
-```java
-// Java
-
-class Playground {
-  public static void main(String[] args) {
-    String s = "a|b|c|d|e|f";
-    for(String val : s.split("|", 2)) {
-      System.out.println(val);
-    }
-  }
-}
-
-// a
-// b|c|d|e|f
 ```
 
 ```php
@@ -64,14 +50,6 @@ print join("\n", explode("|", "a|b|c|d|e|f", 2));
 print 'a|b|c|d|e|f'.split('|', 2)
 
 # ["a", "b|c|d|e|f"]
-```
-
-```python
-# Python
-
-print('a|b|c|d|e|f'.split('|', 2))
-
-# ['a', 'b', 'c|d|e|f']
 ```
 
 ```go
@@ -102,6 +80,30 @@ fn main() {
 // ["a", "b|c|d|e|f"]
 ```
 
+```java
+// Java
+
+class Playground {
+  public static void main(String[] args) {
+    String s = "a|b|c|d|e|f";
+    for(String val : s.split("|", 2)) {
+      System.out.println(val);
+    }
+  }
+}
+
+// a
+// |b|c|d|e|f
+```
+
+```python
+# Python
+
+print('a|b|c|d|e|f'.split('|', 2))
+
+# ['a', 'b', 'c|d|e|f']
+```
+
 ```js
 // JavaScript
 
@@ -110,19 +112,73 @@ console.log("a|b|c|d|e|f".split("|", 2));
 // ["a", "b"]
 ```
 
-JavaScipt is definitly the odd one out here. Python's behavior is a little
-weird, but at least no part of the input string is lost. All of the other tested
-languages agree with each other.
+The first 5/8 languages agree here. They consider the N to mean "the number of
+items returned" and the remainder to be the last item in the returned array.
+This means they actually split N-1 times.
 
-This behaviour is good, because it makes `split` the reverse function to `join`.
-In JS this assertion is not true for all values of N:
-`val.split(sep, N).join(sep) === val`.
+Java and Python also agree that the remainder should be returned as the last
+item in the array. They disagree with the rest about what N means though. Python
+splits N times, and returns N+1 items. Java returns N items, and also splits N-1
+times, but curiously includes the separator character in the last item.
+
+JavaScript diverges from the pack completely though: it splits N times, and
+returns N items, but does not return a remainder. It is the only language to do
+so.
+
+The most common behaviour has some nice properties:
+
+### `split` is the opposite of `join`
+
+In all languages with the exception of JavaScript and Java, `split` is the
+inverse operation of `join`. In those languages the below assertion holds.
+
+For any string V and any seperator S and any unsigned non 0 integer N, the
+following is valid:
+
+```js
+join(S, V.split(S, N)) == V;
+```
+
+### Prefix splits
+
+Many formats out there are character delimited. It is useful to be able to
+easially split a string at those predefined "split points" into two parts. For
+example the INI file format uses the `=` character to separate key-value pairs,
+and the `\n` character to separate key-value pairs from each other.
+
+```ini
+key = value
+other_key = 'value contains an = sign'
+```
+
+With the current "split" in JavaScript, parsing this is not as obvious as with
+the "more popular" splitting algorithm:
+
+```js
+// Current JavaScript
+const ini = Deno.readTextFileSync("./test.ini");
+const entries = ini.split("\n").map((line) => {
+  const [key, ...rest] = line.split("=");
+  return [key, rest.join("=")];
+});
+
+// Other languages
+const ini = Deno.readTextFileSync("./test.ini");
+const entries = ini.split("\n").map((line) => line.splitn("=", 2));
+```
+
+> **Note:** I am aware this could be made more efficient with a different
+> "parser". That is not the point. The point is to make the obvious thing easy.
+
+This behavious is not just relevant for the INI file format, but also for things
+like HTTP headers in HTTP/1.1, key value pairs in `Cookie` headers, and many
+more.
 
 ## Proposal
 
-The proposal is to add a new `String.prototype.splitn` method that "splits" N
-number and returns the remainder rather than splitting N + 1 times and throwing
-away the remainder.
+The proposal is to add a new `String.prototype.splitn` method that splits the
+input string at most N-1 times, returning N substrings. The last item contains
+the remainder of the string.
 
 ```js
 console.log("a|b|c|d|e|f".splitn("|", 2));
@@ -157,5 +213,10 @@ The last option is the most clear, but is also the most verbose. The verbosity
 may make it cumbersome to use.
 
 Which of the 4 proposed options should ultimately be used should be up to the
-committee as a whole. I don't really care (although I prefer the `splitn` or the
-final option).
+committee as a whole. I don't really care (although I prefer the `splitn`
+option).
+
+### I like the current behaviour of split!
+
+No worries! It isn't going away. The new `splitn` function is meant to simplify
+the usecases described above. You can continue to use `split` as it exists now.
