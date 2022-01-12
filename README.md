@@ -85,15 +85,15 @@ fn main() {
 
 class Playground {
   public static void main(String[] args) {
-    String s = "a|b|c|d|e|f";
-    for(String val : s.split("|", 2)) {
+    String s = new String("a|b|c|d|e|f");
+    for(String val : s.split("\\|", 2)) {
       System.out.println(val);
     }
   }
 }
 
 // a
-// |b|c|d|e|f
+// b|c|d|e|f
 ```
 
 ```python
@@ -112,18 +112,17 @@ console.log("a|b|c|d|e|f".split("|", 2));
 // ["a", "b"]
 ```
 
-The first 5/8 languages agree here. They consider the N to mean "the number of
+The first 6/8 languages agree here. They consider the N to mean "the number of
 items returned" and the remainder to be the last item in the returned array.
 This means they actually split N-1 times.
 
-Java and Python also agree that the remainder should be returned as the last
-item in the array. They disagree with the rest about what N means though. Python
-splits N times, and returns N+1 items. Java returns N items, and also splits N-1
-times, but curiously includes the separator character in the last item.
+Python also agree that the remainder should be returned as the last item in the
+array. It disagrees with the rest about what N means though. Python splits N
+times, and returns N+1 items.
 
 JavaScript diverges from the pack completely though: it splits N times, and
-returns N items, but does not return a remainder. It is the only language to do
-so.
+returns N items, but does not return a remainder at all. It is the only language
+to do so.
 
 The most common behaviour has some nice properties:
 
