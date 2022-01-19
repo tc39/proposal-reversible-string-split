@@ -1,4 +1,4 @@
-# Proper String Split
+# String.prototype.splitn
 
 ![](./cover.png)
 
