@@ -1,4 +1,4 @@
-# String.prototype.splitn
+# Reversible string split
 
 ![](./cover.png)
 
@@ -124,19 +124,21 @@ JavaScript diverges from the pack completely though: it splits N times, and
 returns N items, but does not return a remainder at all. It is the only language
 to do so.
 
-The most common behaviour has some nice properties:
+Even though Python and the other langauges are slightly different from each
+other, all their algorithms have a common feature that JavaScript is missing:
+their splits are reversible. This means that if you split a string into N items,
+you can join them back together without losing any information.
 
-### `split` is the opposite of `join`
-
-In all languages with the exception of JavaScript and Java, `split` is the
-inverse operation of `join`. In those languages the below assertion holds.
-
-For any string V and any seperator S and any unsigned non 0 integer N, the
-following is valid:
+Reversible splits have the property that for any string V and any seperator S
+and any unsigned non 0 integer N, the following is valid:
 
 ```js
 join(S, V.split(S, N)) == V;
 ```
+
+This reversability allows using string splits for some very useful tasks, where
+the current split method does not work. The most common use case for this are
+prefix splits:
 
 ### Prefix splits
 
@@ -175,9 +177,10 @@ more.
 
 ## Proposal
 
-The proposal is to add a new `String.prototype.splitn` method that splits the
-input string at most N-1 times, returning N substrings. The last item contains
-the remainder of the string.
+The proposal is to add reversible string split support to JavaScript. This
+propsal proposes the addition of a `String.prototype.splitn` method that splits
+the input string at most N-1 times, returning N substrings. The last item
+contains the remainder of the string.
 
 ```js
 console.log("a|b|c|d|e|f".splitn("|", 2));
