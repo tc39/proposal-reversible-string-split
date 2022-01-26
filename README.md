@@ -165,7 +165,7 @@ const entries = ini.split("\n").map((line) => {
 
 // Other languages
 const ini = Deno.readTextFileSync("./test.ini");
-const entries = ini.split("\n").map((line) => line.splitn("=", 2));
+const entries = ini.split("\n").map((line) => line.splitN("=", 2));
 ```
 
 > **Note:** I am aware this could be made more efficient with a different
@@ -178,12 +178,12 @@ more.
 ## Proposal
 
 The proposal is to add reversible string split support to JavaScript. This
-propsal proposes the addition of a `String.prototype.splitn` method that splits
+propsal proposes the addition of a `String.prototype.splitN` method that splits
 the input string at most N-1 times, returning N substrings. The last item
 contains the remainder of the string.
 
 ```js
-console.log("a|b|c|d|e|f".splitn("|", 2));
+console.log("a|b|c|d|e|f".splitN("|", 2));
 // ["a", "b|c|d|e|f"]
 ```
 
@@ -221,10 +221,10 @@ in current engines, it might make it look like the extra option is supported,
 whereas in fact it is not - it is just being ignored.
 
 Which of the 4 proposed options should ultimately be used should be up to the
-committee as a whole. I don't really care (although I prefer the `splitn`
+committee as a whole. I don't really care (although I prefer the `splitN`
 option).
 
 ### I like the current behaviour of split!
 
-No worries! It isn't going away. The new `splitn` function is meant to simplify
+No worries! It isn't going away. The new `splitN` function is meant to simplify
 the usecases described above. You can continue to use `split` as it exists now.
