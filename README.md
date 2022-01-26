@@ -171,7 +171,7 @@ const entries = ini.split("\n").map((line) => line.splitn("=", 2));
 > **Note:** I am aware this could be made more efficient with a different
 > "parser". That is not the point. The point is to make the obvious thing easy.
 
-This behavious is not just relevant for the INI file format, but also for things
+This behaviour is not just relevant for the INI file format, but also for things
 like HTTP headers in HTTP/1.1, key value pairs in `Cookie` headers, and many
 more.
 
