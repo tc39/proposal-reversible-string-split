@@ -228,3 +228,18 @@ option).
 
 No worries! It isn't going away. The new `splitN` function is meant to simplify
 the usecases described above. You can continue to use `split` as it exists now.
+
+### Why is JavaScript's split so different from other languages?
+
+To be completly honest: we don't really know. Nobody we have asked has been able
+to give us a good answer yet. What we do know:
+
+- Netscape Navigator 4, released in June 1997 was the first browser to support
+  the second argument to the `split` method with it's current behaviour. NN3
+  released 10 months prior did not have it.
+- IE 4, released 4 months later, does not have this feature/behaviour.
+- The first ECMA262 version this behaviour is specified is ES3.
+- The behaviour did not come from Java. It only added a `String.split` method in
+  version 1.4 (2002).
+
+Thanks to @hax and @aimingoo for the research on this.
