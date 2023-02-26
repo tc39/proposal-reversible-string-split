@@ -185,6 +185,9 @@ contains the remainder of the string.
 ```js
 console.log("a|b|c|d|e|f".splitN("|", 2));
 // ["a", "b|c|d|e|f"]
+
+console.log("a|b|c|d|e|f".splitN("|", -2));
+// ["a|b|c|d|e", "f"]
 ```
 
 The naming is taken from Rust and Go.
